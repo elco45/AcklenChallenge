@@ -1,0 +1,30 @@
+{
+  "name": "angular-scaffold",
+  "version": "1.0.0",
+  "description": "AcklenChallenge with hapi.js serving it",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/elco45/AcklenChallenge.git"
+  },
+  "keywords": [
+    "angular",
+    "hapi",
+    "node",
+    "bootstrap",
+    "scaffold"
+  ],
+  "author": "Dennis Cheong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elco45/AcklenChallenge/issues"
+  },
+  "homepage": "https://github.com/elco45/AcklenChallenge#readme",
+  "dependencies": {
+    "hapi": "^11.1.0",
+    "inert": "^3.2.0"
+  }
+}
