@@ -4,11 +4,9 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
 
   	$scope.changeExampleObject = function(){
   	   	$scope.exampleObject = {text: "Adios, mundo."};
-  	   	var param = {
-	        w: "asf"
-	      }
+  	   	var param = {}
   	   	HomeService.GetResponse(param).then(function(response){
-  	   		console.log(response)
+  	   		console.log(response.data)
   	   	})
   	}
 }]);
