@@ -25,6 +25,7 @@
   "homepage": "https://github.com/elco45/AcklenChallenge#readme",
   "dependencies": {
     "hapi": "^11.1.0",
-    "inert": "^3.2.0"
+    "inert": "^3.2.0",
+    "request": "^2.74.0"
   }
 }
