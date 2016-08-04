@@ -4,19 +4,76 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
   	$scope.fibonacciList = FillFibonacciList();
 
   	$scope.changeExampleObject = function(){
-  	   	/*HomeService.GetResponse().then(function(response){
-  	   		var result = IronMan(response.data.words)
+  	   	HomeService.GetResponse().then(function(response){
+  	   		var result;
+  	   		var param = {}
   	   		console.log(response)
-  	   	})*/
-  	   	var fruits = ["Banana", "Orange", "Apple", "BiRd"];
-  	   	var result = ReplaceWithFibo(fruits,5)
-  	   	console.log(result)
+  	   		if (response.data.algorithm == "IronMan") {
+  	   			console.log("IronMan")
+  	   			result = IronMan(response.data.words);
+  	   			param.algorithm = "IronMan"
+  	   		}else if (response.data.algorithm == "TheIncredibleHulk"){
+  	   			console.log("TheIncredibleHulk")
+  	   			result = TheIncredibleHulk(response.data.words);
+  	   			param.algorithm = "TheIncredibleHulk"
+  	   		}else if (response.data.algorithm == "Thor"){
+  	   			console.log("Thor")
+  	   			result = Thor(response.data.words,response.data.startingFibonacciNumber);
+  	   			param.algorithm = "Thor"
+  	   		}else if (response.data.algorithm == "CaptainAmerica"){
+  	   			console.log("CaptainAmerica")
+  	   			result = CaptainAmerica(response.data.words,response.data.startingFibonacciNumber);
+  	   			param.algorithm = "CaptainAmerica"
+  	   		}
+  	   		param.encodedValue = result
+  	   		param.guid = response.data.guid
+  	   		console.log(param)
+  	   		console.log(result)
+  	   		HomeService.SendPost(param).then(function(response){
+  	   			console.log(response)
+  	   		});
+  	   		//console.log(response)
+  	   	})
+  	   	/*
+  	   	var tryr = ["x233z377mS","C610L987Mn","g15972584H41816765","Fl10946sH","m17711t28657r4636875025LsN121393196418d317811d","F514229M832040R","g1346269m","C2178309L3524578Mn","Th5702887s9227465sH14930352Rd","C24157817Mm39088169n63245986c102334155t165580141267914296N"]
+  	   	//var tryr = ["x23","C6","g15","t110","Th"]
+  	   	//console.log(CaptainAmerica(tryr,233))
+  	   	console.log(tryr)
+  	   	console.log("------------------------------------------")
+  	   	console.log(AlternateConsonants(tryr))*/
+  	   	//console.log(window.btoa(CaptainAmerica(tryr,233)))
+  	   	/*
+  	   	var tmp1 = ['dog','cat','5zebra','bird'];
+  	   	var tmp2 = ['hEllo','bOok','read','NeEd','paliNdromE','happy'];
+  	   	var str1 = "dog98cat100bird99";
+  	   	var str2 = "dog*cat*bird"
+  	   	var tmp3 = ['DoG','CaT','BiRd']
+  	   	var tmp4 = ['dog','cat','bird']
+		*/
+  	   	/*
+  	   	console.log(tmp1.sort());
+  	   	console.log(ShiftAll(tmp2));
+  	   	console.log(ConcatenateWithAscii(tmp4))
+  	   	console.log(window.btoa(str1))
+  	   	*/
+/*
+  	   	console.log(ShiftAll(tmp2))
+  	   	console.log(ConcatenateWithAsterisks(tmp4))
+  	   	console.log(window.btoa(ConcatenateWithAsterisks(tmp4))) 
+  	   	*/
+
+		/*
+  	   	console.log(AlternateConsonants(tmp3))
+  	   	console.log(ReplaceWithFibo(tmp4, 5))
+  	   	*/
   	}
 
   	//Starting with algorithms
   	function IronMan(array){
   		//Step 1
-  		array.sort();
+  		array.sort(function (a, b) {
+		    return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
   		//Step 2
   		var newArray = ShiftAll(array);
   		//Step 3 and 4
@@ -28,7 +85,9 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
   		//Step 1
   		var newArray = ShiftAll(array);
   		//Step 2
-  		newArray.sort();
+  		newArray.sort(function (a, b) {
+		    return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
   		newArray.reverse();
   		//Step 3
   		var result = window.btoa(ConcatenateWithAsterisks(newArray));
@@ -36,26 +95,31 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
   	}
 
   	function Thor(array, fibo){
+  		console.log(array)
   		//Step 1 --> nodejs hypher
   		//Step 2
-  		array.sort();
+  		array.sort(function (a, b) {
+		    return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
   		//Step 3
   		var newArray = AlternateConsonants(array);
   		//Step 4
-  		newArray = ReplaceWithFibo(array, fibo);
+  		newArray = ReplaceWithFibo(newArray, fibo);
   		//Step 5
   		var result = window.btoa(ConcatenateWithAsterisks(newArray));
   		return result
   	}
 
-  	function CaptainAmerica(array){
+  	function CaptainAmerica(array,fibo){
   		//Step 1
   		var newArray = ShiftAll(array);
   		//Step 2
-  		newArray.sort();
+  		newArray.sort(function (a, b) {
+		    return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
   		newArray.reverse();
   		//Step 3
-  		newArray = ReplaceWithFibo(array, fibo);
+  		newArray = ReplaceWithFibo(newArray, fibo);
   		//Step 4 and 5
   		var result = window.btoa(ConcatenateWithAscii(newArray));
   		return result
@@ -100,9 +164,9 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
 
     function ConcatenateWithAscii(array){
         var result = "";
-        result = array[0] + array[0].charCodeAt(0);
+        result = array[0] + array[array.length-1].charCodeAt(0);
         for (var i = 1; i < array.length; i++){
-            result += array[i] + array[0].charCodeAt(0);
+            result += array[i] + array[i-1].charCodeAt(0);
         }
         return result;
     }
@@ -110,8 +174,14 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
     function ConcatenateWithAsterisks(array){
     	var result = "";
     	for (var i = 0; i < array.length; i++){
-    		result += array[i] + "*";
+    		if (i!=array.length-1) {
+    			result += (array[i] + '*');
+    		}else{
+    			result += array[i];
+    		}
+    		
     	}
+    	return result;
     }
 
     function AlternateConsonants(array){
@@ -119,7 +189,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
 		for (var i = 0; i < array.length; i++){
 			cont = 0;
 			for (var j = 0; j < array[i].length; j++){
-				if ($scope.vowelList.indexOf(array[i][j]) == -1) {//is Consonant
+				if ($scope.vowelList.indexOf(array[i][j]) == -1 && isNaN(array[i][j])) {//is Consonant
 					if (cont%2 == 0) {
 						if(j == array[i].length-1){
 							array[i] = array[i].substr(0,j) + array[i][j].toUpperCase(); 
