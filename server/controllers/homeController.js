@@ -1,9 +1,6 @@
 var request = require('request');
 var urlApi ='http://internal-devchallenge-2-dev.apphb.com/'
 var guid = require('node-uuid');
-var Hypher = require('hypher');
-english = require('hyphenation.en-us');
-h = new Hypher(english);
 
 exports.getResponse = {
   	handler: function(req, reply) {
@@ -12,20 +9,7 @@ exports.getResponse = {
 		  	if (!error) {
 			  	var all = JSON.parse(body);
 			  	all.guid = uuid;
-			  	if (all.algorithm != "Thor") {
-		 			return reply(all);
-			  	}else{
-			  		var newArray = [];
-			  		var temp;
-			  		for (var i = 0; i < all.words.length; i++){
-			  			temp = h.hyphenate(all.words[i]);
-			  			for (var j = 0; j < temp.length; j++){
-			  				newArray.push(temp[j])
-			  			}
-			  		}
-			  		all.words = newArray;
-			  		return reply(all)
-			  	}
+		 		return reply(all);
 		  	}
 		});
   	}

@@ -2,6 +2,8 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
   	$scope.exampleObject = {text: "Hello ^.^"}
   	$scope.vowelList = ['a','A','e','E','i','I','o','O','u','U','y','Y']
   	$scope.fibonacciList = FillFibonacciList();
+  	$scope.sampleWords = ["drool", "cats", "clean", "code", "dogs", "materials", "needed", "this", "is", "hard","what", "are", "you", "smoking", "shot", "gun", "down", "river", "super", "man", "rule", "acklen","developers", "amazing", "home", "notch", "light", "saw"];
+
 
   	$scope.changeExampleObject = function(){
   	   	HomeService.GetResponse().then(function(response){
@@ -35,12 +37,12 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
   	   		//console.log(response)
   	   	})
   	   	/*
-  	   	var tryr = ["x233z377mS","C610L987Mn","g15972584H41816765","Fl10946sH","m17711t28657r4636875025LsN121393196418d317811d","F514229M832040R","g1346269m","C2178309L3524578Mn","Th5702887s9227465sH14930352Rd","C24157817Mm39088169n63245986c102334155t165580141267914296N"]
+  	   	var tryr = ["xa","C610L987Mn","g15972584H41816765","Fl10946sH","m17711t28657r4636875025LsN121393196418d317811d","F514229M832040R","g1346269m","C2178309L3524578Mn","Th5702887s9227465sH14930352Rd","C24157817Mm39088169n63245986c102334155t165580141267914296N"]
   	   	//var tryr = ["x23","C6","g15","t110","Th"]
   	   	//console.log(CaptainAmerica(tryr,233))
   	   	console.log(tryr)
   	   	console.log("------------------------------------------")
-  	   	console.log(AlternateConsonants(tryr))*/
+  	   	console.log(Thor(tryr,5))*/
   	   	//console.log(window.btoa(CaptainAmerica(tryr,233)))
   	   	/*
   	   	var tmp1 = ['dog','cat','5zebra','bird'];
@@ -95,8 +97,8 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
   	}
 
   	function Thor(array, fibo){
-  		console.log(array)
-  		//Step 1 --> nodejs hypher
+  		//Step 1 
+  		array = SeparateWords(array);
   		//Step 2
   		array.sort(function (a, b) {
 		    return a.toLowerCase().localeCompare(b.toLowerCase());
@@ -184,6 +186,39 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
     	return result;
     }
 
+    function SeparateWords(array){
+        var newArray = [];
+        for (var i = 0; i < array.length; i++){
+            if (MoreThanOne(array[i])){
+                var tmp = "";
+                for (var j = 0; j < array[i].length; j++){
+                    tmp += array[i][j];
+                    if ($scope.sampleWords.indexOf(tmp.toLowerCase())>=0){
+                        newArray.push(tmp);
+                        tmp = "";
+                    }
+                }
+            }else{
+                newArray.push(array[i]);
+            }
+        }
+        return newArray;
+    }
+
+
+    function MoreThanOne(word){
+        var cont =0;
+        for (var i = 0; i < $scope.sampleWords.length; i++){
+            if (word.toLowerCase().indexOf($scope.sampleWords[i])>=0) {
+                 cont++;
+            }
+        }
+        if (cont > 1){
+            return true;
+        }
+        return false;
+    }
+
     function AlternateConsonants(array){
     	var cont = 0;
 		for (var i = 0; i < array.length; i++){
@@ -212,26 +247,28 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
 
     function ReplaceWithFibo(array, fibo){
     	var cont = $scope.fibonacciList.indexOf(fibo);
+    	var newArray = array;
     	for (var i = 0; i < array.length; i++){
     		for (var j = 0; j < array[i].length; j++){
     			if ($scope.vowelList.indexOf(array[i][j])>=0) {// is a vowel
     				if(j == array[i].length-1){
-						array[i] = array[i].substr(0,j) + $scope.fibonacciList[cont]; 
+						newArray[i] = array[i].substr(0,j) + $scope.fibonacciList[cont]; 
 					}else{
-						array[i] = array[i].substr(0,j) + $scope.fibonacciList[cont] + array[i].substr(j+1);
+						newArray[i] = array[i].substr(0,j) + $scope.fibonacciList[cont] + array[i].substr(j+1);
 					}
 					cont++;
     			}
     		}
     	}
-    	return array;
+    	return newArray;
     }
     
     function FillFibonacciList(){
 		var array = [0,1]; 
-		for (var i = 2; i <= 60; i++){
+		for (var i = 2; i <= 100; i++){
 		    array.push(array[i-2] + array[i-1]);
 		}
 		return array;
     }
+    
 }]);
