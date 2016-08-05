@@ -6,43 +6,46 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
 
 
   	$scope.changeExampleObject = function(){
-  	   	HomeService.GetResponse().then(function(response){
-  	   		var result;
-  	   		var param = {}
-  	   		console.log(response)
-  	   		if (response.data.algorithm == "IronMan") {
-  	   			console.log("IronMan")
-  	   			result = IronMan(response.data.words);
-  	   			param.algorithm = "IronMan"
-  	   		}else if (response.data.algorithm == "TheIncredibleHulk"){
-  	   			console.log("TheIncredibleHulk")
-  	   			result = TheIncredibleHulk(response.data.words);
-  	   			param.algorithm = "TheIncredibleHulk"
-  	   		}else if (response.data.algorithm == "Thor"){
-  	   			console.log("Thor")
-  	   			result = Thor(response.data.words,response.data.startingFibonacciNumber);
-  	   			param.algorithm = "Thor"
-  	   		}else if (response.data.algorithm == "CaptainAmerica"){
-  	   			console.log("CaptainAmerica")
-  	   			result = CaptainAmerica(response.data.words,response.data.startingFibonacciNumber);
-  	   			param.algorithm = "CaptainAmerica"
-  	   		}
-  	   		param.encodedValue = result
-  	   		param.guid = response.data.guid
-  	   		console.log(param)
-  	   		console.log(result)
-  	   		HomeService.SendPost(param).then(function(response){
-  	   			console.log(response)
-  	   		});
-  	   		//console.log(response)
-  	   	})
+  		for (var i = 0; i < 20; i++){
+	  	   	HomeService.GetResponse().then(function(response){
+	  	   		var result;
+	  	   		var param = {}
+	  	   		console.log(response)
+	  	   		if (response.data.algorithm == "IronMan") {
+	  	   			console.log("IronMan")
+	  	   			result = IronMan(response.data.words);
+	  	   			param.algorithm = "IronMan"
+	  	   		}else if (response.data.algorithm == "TheIncredibleHulk"){
+	  	   			console.log("TheIncredibleHulk")
+	  	   			result = TheIncredibleHulk(response.data.words);
+	  	   			param.algorithm = "TheIncredibleHulk"
+	  	   		}else if (response.data.algorithm == "Thor"){
+	  	   			console.log("Thor")
+	  	   			result = Thor(response.data.words,response.data.startingFibonacciNumber);
+	  	   			param.algorithm = "Thor"
+	  	   		}else if (response.data.algorithm == "CaptainAmerica"){
+	  	   			console.log("CaptainAmerica")
+	  	   			result = CaptainAmerica(response.data.words,response.data.startingFibonacciNumber);
+	  	   			param.algorithm = "CaptainAmerica"
+	  	   		}
+	  	   		param.encodedValue = result
+	  	   		param.guid = response.data.guid
+	  	   		console.log(param)
+	  	   		console.log(result)
+	  	   		HomeService.SendPost(param).then(function(response){
+	  	   			console.log(response)
+	  	   		});
+	  	   		//console.log(response)
+	  	   	})
+  	   	}
   	   	/*
-  	   	var tryr = ["xa","C610L987Mn","g15972584H41816765","Fl10946sH","m17711t28657r4636875025LsN121393196418d317811d","F514229M832040R","g1346269m","C2178309L3524578Mn","Th5702887s9227465sH14930352Rd","C24157817Mm39088169n63245986c102334155t165580141267914296N"]
+  	   	var tryr = ["Bl13Sh21Ng","aShUpH","d610C987d1597R","d2584C4181d6765R","1094617711rD28657x","F46368m75025R","g121393BbL196418nG","g317811M","514229w832040Ft1346269","21783093524578Ns5702887L"]
   	   	//var tryr = ["x23","C6","g15","t110","Th"]
   	   	//console.log(CaptainAmerica(tryr,233))
   	   	console.log(tryr)
   	   	console.log("------------------------------------------")
-  	   	console.log(Thor(tryr,5))*/
+  	   	console.log(SeparateWords(tryr))
+  	   	console.log(AlternateConsonants(SeparateWords(tryr)))
   	   	//console.log(window.btoa(CaptainAmerica(tryr,233)))
   	   	/*
   	   	var tmp1 = ['dog','cat','5zebra','bird'];
@@ -103,11 +106,14 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
   		array.sort(function (a, b) {
 		    return a.toLowerCase().localeCompare(b.toLowerCase());
 		});
+		console.log(array)
   		//Step 3
   		var newArray = AlternateConsonants(array);
+  		console.log(newArray)
   		//Step 4
   		newArray = ReplaceWithFibo(newArray, fibo);
-  		//Step 5
+  		console.log(newArray)
+  		//Step 5 and 6
   		var result = window.btoa(ConcatenateWithAsterisks(newArray));
   		return result
   	}
@@ -191,11 +197,14 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
         for (var i = 0; i < array.length; i++){
             if (MoreThanOne(array[i])){
                 var tmp = "";
+                var tmp2 = "";
                 for (var j = 0; j < array[i].length; j++){
                     tmp += array[i][j];
-                    if ($scope.sampleWords.indexOf(tmp.toLowerCase())>=0){
+                    tmp2 = tmp;
+                    if ($scope.sampleWords.indexOf(tmp2.toLowerCase())>=0){
                         newArray.push(tmp);
                         tmp = "";
+                        tmp2 = "";
                     }
                 }
             }else{
@@ -221,29 +230,46 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
 
     function AlternateConsonants(array){
     	var cont = 0;
+    	if (isLowerCase(firstLetter(array))) {
+			cont = 1;
+		}
 		for (var i = 0; i < array.length; i++){
-			cont = 0;
 			for (var j = 0; j < array[i].length; j++){
-				if ($scope.vowelList.indexOf(array[i][j]) == -1 && isNaN(array[i][j])) {//is Consonant
-					if (cont%2 == 0) {
+				if ($scope.vowelList.indexOf(array[i][j]) == -1 && isNaN(array[i][j])) {//is Consonant and not numeric
+					if (cont%2 == 0) {//starts with upperCase
 						if(j == array[i].length-1){
 							array[i] = array[i].substr(0,j) + array[i][j].toUpperCase(); 
 						}else{
 							array[i] = array[i].substr(0,j) + array[i][j].toUpperCase() + array[i].substr(j+1);
 						}
-					}else{
+					}else{//starts with lowerCase
 						if(j == array[i].length-1){
 							array[i] = array[i].substr(0,j) + array[i][j].toLowerCase(); 
 						}else{
 							array[i] = array[i].substr(0,j) + array[i][j].toLowerCase() + array[i].substr(j+1);
 						}
 					}
-					cont++
+					cont++;
 				}
 			}
 		}
 		return array;
     }
+
+    function isLowerCase(str) {
+	    return str !== str.toUpperCase();
+	}
+
+	function firstLetter(array) {
+		for (var i = 0; i < array.length; i++){
+			for (var j = 0; j < array[i].length; j++){
+				if (isNaN(array[i][j])) {
+					return array[i][j];
+				}
+			}
+		}
+		return -1;
+	}
 
     function ReplaceWithFibo(array, fibo){
     	var cont = $scope.fibonacciList.indexOf(fibo);

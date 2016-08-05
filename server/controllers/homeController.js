@@ -1,6 +1,7 @@
 var request = require('request');
 var urlApi ='http://internal-devchallenge-2-dev.apphb.com/'
 var guid = require('node-uuid');
+var webHook = "http://379b3dfe.ngrok.io/v1/secret"
 
 exports.getResponse = {
   	handler: function(req, reply) {
@@ -17,38 +18,40 @@ exports.getResponse = {
 
 exports.getSecret = {
 	handler: function (request, reply) {
-		console.log(request.payload.asd)
-        const response = reply('The secret message is:' + request.payload.asd)
+		console.log("------->"+request.payload.secret)
+
+        const response = reply('The secret message is:' + request.payload.secret)
         response.header('Content-Type', 'application/json')
     }
 }
 
 exports.sendPost = {
 	handler: function (req, reply){
-		console.log(req.payload.encodedValue)
-		var m = urlApi+"values/"+req.payload.guid+"/"+req.payload.algorithm
-		console.log(m)
-		request({
-			url: m,
-			method: 'POST',
-			headers: {
+		var val = req.payload.encodedValue;
+		var ur = urlApi+"values/"+req.payload.guid+"/"+req.payload.algorithm;
+		var param = {
+			"url": ur,
+			"headers": {
 				"Content-Type": "application/json",
 				"Accept": "application/json"},
-			encodedValue: req.payload.encodedValue,
-			emailAddress: "guau@guau.com",
-			name: "Meow",
-			webHookUrl: "http://452082cc.ngrok.io/v1/secret",
-			repoUrl: "meow@git.com"},
-		function (error, response, body) {
+			"form": {
+				"encodedValue": val,
+				"emailAddress": "guau@guau.com",
+				"name": "Meow",
+				"webHookUrl": webHook,
+				"repoUrl": "meow@git.com"}};
+		request.post(param, function (error, response, body) {
 			if(!error){
+
 				console.log("---------------------------------------------------")
 				console.log(body)
 				return reply(response)	
 			}else{
 				return reply(error)
 			}
-			
+			return reply('ok')
 		});
+		
 	}
 }
 
