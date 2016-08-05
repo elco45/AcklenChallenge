@@ -1,10 +1,9 @@
 angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$scope','HomeService', function ($scope,HomeService) {
-  	$scope.exampleObject = {text: "Hello ^.^"}
-  	$scope.vowelList = ['a','A','e','E','i','I','o','O','u','U','y','Y']
+  	$scope.sampleWords = ["drool", "cats", "clean", "code", "dogs", "materials", "needed", "this", "is", "hard","what", "are", "you", "smoking", "shot", "gun", "down", "river", "super", "man", "rule", "acklen","developers", "amazing"];
+	$scope.vowelList = ['a','A','e','E','i','I','o','O','u','U','y','Y']
   	$scope.fibonacciList = FillFibonacciList();
-  	$scope.sampleWords = ["drool", "cats", "clean", "code", "dogs", "materials", "needed", "this", "is", "hard","what", "are", "you", "smoking", "shot", "gun", "down", "river", "super", "man", "rule", "acklen","developers", "amazing", "home", "notch", "light", "saw"];
-
-
+  	$scope.exampleObject = {text: "Hello ^.^"}
+  	
   	$scope.changeExampleObject = function(){
   		for (var i = 0; i < 20; i++){
 	  	   	HomeService.GetResponse().then(function(response){
@@ -30,47 +29,12 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
 	  	   		}
 	  	   		param.encodedValue = result
 	  	   		param.guid = response.data.guid
-	  	   		console.log(param)
 	  	   		console.log(result)
 	  	   		HomeService.SendPost(param).then(function(response){
 	  	   			console.log(response)
 	  	   		});
-	  	   		//console.log(response)
 	  	   	})
   	   	}
-  	   	/*
-  	   	var tryr = ["Bl13Sh21Ng","aShUpH","d610C987d1597R","d2584C4181d6765R","1094617711rD28657x","F46368m75025R","g121393BbL196418nG","g317811M","514229w832040Ft1346269","21783093524578Ns5702887L"]
-  	   	//var tryr = ["x23","C6","g15","t110","Th"]
-  	   	//console.log(CaptainAmerica(tryr,233))
-  	   	console.log(tryr)
-  	   	console.log("------------------------------------------")
-  	   	console.log(SeparateWords(tryr))
-  	   	console.log(AlternateConsonants(SeparateWords(tryr)))
-  	   	//console.log(window.btoa(CaptainAmerica(tryr,233)))
-  	   	/*
-  	   	var tmp1 = ['dog','cat','5zebra','bird'];
-  	   	var tmp2 = ['hEllo','bOok','read','NeEd','paliNdromE','happy'];
-  	   	var str1 = "dog98cat100bird99";
-  	   	var str2 = "dog*cat*bird"
-  	   	var tmp3 = ['DoG','CaT','BiRd']
-  	   	var tmp4 = ['dog','cat','bird']
-		*/
-  	   	/*
-  	   	console.log(tmp1.sort());
-  	   	console.log(ShiftAll(tmp2));
-  	   	console.log(ConcatenateWithAscii(tmp4))
-  	   	console.log(window.btoa(str1))
-  	   	*/
-/*
-  	   	console.log(ShiftAll(tmp2))
-  	   	console.log(ConcatenateWithAsterisks(tmp4))
-  	   	console.log(window.btoa(ConcatenateWithAsterisks(tmp4))) 
-  	   	*/
-
-		/*
-  	   	console.log(AlternateConsonants(tmp3))
-  	   	console.log(ReplaceWithFibo(tmp4, 5))
-  	   	*/
   	}
 
   	//Starting with algorithms
@@ -106,13 +70,10 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
   		array.sort(function (a, b) {
 		    return a.toLowerCase().localeCompare(b.toLowerCase());
 		});
-		console.log(array)
   		//Step 3
   		var newArray = AlternateConsonants(array);
-  		console.log(newArray)
   		//Step 4
   		newArray = ReplaceWithFibo(newArray, fibo);
-  		console.log(newArray)
   		//Step 5 and 6
   		var result = window.btoa(ConcatenateWithAsterisks(newArray));
   		return result
@@ -133,6 +94,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
   		return result
   	}
 
+  	//Starting at the beginning of each word, shift each vowel to the right by one letter....
     function ShiftAll(array){
         var newArray=[];
         for (var i = 0; i < array.length; i++){
@@ -150,13 +112,13 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
                 newWord = Swap(newWord, i, i + 1);
                 i++;
             }else{
-            	newWord = Swap(newWord, i, i+1);
+            	newWord = Swap(newWord, i, i + 1);
             }
         }
         return newWord;
     }
 
-    function Swap(word,first,last){
+    function Swap(word,first,last){//swaps letter
     	var char1 = word[first];
     	var char2 = word[last];
     	var newWord = word;
@@ -170,6 +132,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
     	return newWord;
     }
 
+    //Concatenate the word values into one string, delimited by the ASCII value...
     function ConcatenateWithAscii(array){
         var result = "";
         result = array[0] + array[array.length-1].charCodeAt(0);
@@ -179,6 +142,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
         return result;
     }
 
+    //Concatenate the word values into one string, delimited by astericks...
     function ConcatenateWithAsterisks(array){
     	var result = "";
     	for (var i = 0; i < array.length; i++){
@@ -192,6 +156,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
     	return result;
     }
 
+    //For each value in the words array, if a single value contains more than one english word...
     function SeparateWords(array){
         var newArray = [];
         for (var i = 0; i < array.length; i++){
@@ -215,7 +180,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
     }
 
 
-    function MoreThanOne(word){
+    function MoreThanOne(word){//verify if it contains more than one english word
         var cont =0;
         for (var i = 0; i < $scope.sampleWords.length; i++){
             if (word.toLowerCase().indexOf($scope.sampleWords[i])>=0) {
@@ -228,6 +193,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
         return false;
     }
 
+    //For all consonants, alternate between uppercase and lowercase letters...
     function AlternateConsonants(array){
     	var cont = 0;
     	if (isLowerCase(firstLetter(array))) {
@@ -260,7 +226,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
 	    return str !== str.toUpperCase();
 	}
 
-	function firstLetter(array) {
+	function firstLetter(array) {//first non numerical character
 		for (var i = 0; i < array.length; i++){
 			for (var j = 0; j < array[i].length; j++){
 				if (isNaN(array[i][j])) {
@@ -271,6 +237,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
 		return -1;
 	}
 
+	//Replace all vowels with Fibonacci numbers starting with the one provided in the GET
     function ReplaceWithFibo(array, fibo){
     	var cont = $scope.fibonacciList.indexOf(fibo);
     	var newArray = array;
@@ -289,7 +256,7 @@ angular.module('AcklenChallenge.Controllers').controller('HomeController', ['$sc
     	return newArray;
     }
     
-    function FillFibonacciList(){
+    function FillFibonacciList(){//method to fill fibonacciList
 		var array = [0,1]; 
 		for (var i = 2; i <= 100; i++){
 		    array.push(array[i-2] + array[i-1]);

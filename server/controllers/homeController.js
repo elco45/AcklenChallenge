@@ -1,7 +1,7 @@
 var request = require('request');
 var urlApi ='http://internal-devchallenge-2-dev.apphb.com/'
 var guid = require('node-uuid');
-var webHook = "http://379b3dfe.ngrok.io/v1/secret"
+var webHook = "http://598cb285.ngrok.io/v1/secret"
 
 exports.getResponse = {
   	handler: function(req, reply) {
@@ -19,7 +19,6 @@ exports.getResponse = {
 exports.getSecret = {
 	handler: function (request, reply) {
 		console.log("------->"+request.payload.secret)
-
         const response = reply('The secret message is:' + request.payload.secret)
         response.header('Content-Type', 'application/json')
     }
@@ -36,13 +35,12 @@ exports.sendPost = {
 				"Accept": "application/json"},
 			"form": {
 				"encodedValue": val,
-				"emailAddress": "guau@guau.com",
-				"name": "Meow",
+				"emailAddress": "dennischeong@unitec.edu",
+				"name": "Dennis Cheong Cheong",
 				"webHookUrl": webHook,
-				"repoUrl": "meow@git.com"}};
+				"repoUrl": "https://github.com/elco45/AcklenChallenge"}};
 		request.post(param, function (error, response, body) {
 			if(!error){
-
 				console.log("---------------------------------------------------")
 				console.log(body)
 				return reply(response)	

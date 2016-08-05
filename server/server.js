@@ -16,7 +16,6 @@ server.connection({
 
 
 server.register(inert, function(err){
-
 	server.route(routes.endpoints);
 	server.start(function () {
 	    console.log('Server running at:', server.info.uri);
